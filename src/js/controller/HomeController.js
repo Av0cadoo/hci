@@ -97,9 +97,9 @@ angular.module('hci')
         id: $scope.selectedCourseID,
         name: courses[$scope.selectedCourseID].name.en,
         sec: sec,
-        credit: $scope.isAudit
+        credit: !$scope.isAudit
       });
-      if ($scope.isAudit) {
+      if (!$scope.isAudit) {
         self.totalCredit += courses[$scope.selectedCourseID].credit.total;
       }
       $scope.isAudit = false;
@@ -111,6 +111,7 @@ angular.module('hci')
       $scope.enrolledCourses.splice(index, 1);
 
       self.totalCredit -= courses[id].credit.total;
+      self.totalCredit = self.totalCredit <=0 ? 0 : self.totalCredit;
 
       $scope.storage[$scope.userID].enrolled = $scope.enrolledCourses;
       $scope.storage[$scope.userID].credit = self.totalCredit;
