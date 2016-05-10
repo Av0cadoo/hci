@@ -75,7 +75,6 @@ angular.module('hci')
     };
 
     self.enroll = function (sec) {
-      console.log($scope.isAudit);
       var isEnrolled = false;
       $scope.enrolledCourses.forEach(function (enroll) {
         if (enroll.id == $scope.selectedCourseID) {
