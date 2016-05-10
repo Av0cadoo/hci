@@ -16,7 +16,7 @@ angular.module('hci')
     self.selectedItemChange = selectedItemChange;
     self.searchTextChange = searchTextChange;
     self.loading = false;
-    
+
     self.enrolledCourses = $scope.storage[$scope.userID].enrolled || [];
     self.totalCredit = $scope.storage[$scope.userID].credit || 0;
 
@@ -107,12 +107,23 @@ angular.module('hci')
     };
 
     self.drop = function (index, id) {
-      $scope.enrolledCourses.splice(index, 1);
+      var confirm = $mdDialog
+        .confirm()
+        .title('Are you sure?')
+        .textContent('Are you sure to drop this course?')
+        .ok('Sure')
+        .cancel('No');
+      $mdDialog.show(confirm).then(function () {
+        $scope.enrolledCourses.splice(index, 1);
 
-      self.totalCredit -= courses[id].credit.total;
-      self.totalCredit = self.totalCredit <=0 ? 0 : self.totalCredit;
+        self.totalCredit -= courses[id].credit.total;
+        self.totalCredit = self.totalCredit <= 0 ? 0 : self.totalCredit;
 
-      $scope.storage[$scope.userID].enrolled = $scope.enrolledCourses;
-      $scope.storage[$scope.userID].credit = self.totalCredit;
+        $scope.storage[$scope.userID].enrolled = $scope.enrolledCourses;
+        $scope.storage[$scope.userID].credit = self.totalCredit;
+      }, function () {
+        
+      });
+
     };
   });
