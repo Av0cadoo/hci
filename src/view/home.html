@@ -1,0 +1,75 @@
+<div ng-controller="HomeController" layout="column" ng-cloak>
+    <div layout="row">
+        <div class="md-whiteframe-2dp" flex="20">
+            <h2 id="enrolledHeader" class="md-headline md-whiteframe-2dp" flex="20">Enrolled</h2>
+            <div id="enrolled" class="border-right" layout="column" flex="100">
+                <md-card ng-repeat="enrolledCourse in enrolledCourses track by $index">
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-headline">{{enrolledCourse.id}} {{enrolledCourse.name}}</span>
+                            <span class="md-subhead">sec {{enrolledCourse.sec}}</span>
+                        </md-card-title-text>
+                    </md-card-title>
+                    <md-card-actions layout="row" layout-align="end center">
+                        <md-button class="md-raised md-warn" ng-click="drop($index, enrolledCourse.id)">Drop</md-button>
+                    </md-card-actions>
+                </md-card>
+            </div>
+        </div>
+        <md-content flex="80" class="md-padding">
+            <div layout="column" layout-align="center center">
+                <form class="w40" ng-submit="$event.preventDefault()">
+                    <p>Search Course ID:</p>
+                    <div class="w100" layout="row">
+                        <md-autocomplete flex="100" md-selected-item="selectedItem" md-search-text-change="searchTextChange(searchText)" md-search-text="searchText"
+                            md-selected-item-change="selectedItemChange(item)" md-items="item in querySearch(searchText)" md-item-text="item.display"
+                            md-min-length="3" placeholder="0121xxxx">
+                            <md-item-template>
+                                <span md-highlight-text="searchText" md-highlight-flags="^i">{{item.display}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                No Course matching '{{searchText}}' were found.
+                            </md-not-found>
+                        </md-autocomplete>
+                    </div>
+                </form>
+            </div>
+            <br/>
+            <br/>
+            <div layout="column" layout-align="center center">
+                <md-progress-circular md-mode="indeterminate" ng-show="loading"></md-progress-circular>
+                <table class="md-api-table">
+                    <thead>
+                        <tr>
+                            <th>Date - Time</th>
+                            <th>Location</th>
+                            <th>Instructor</th>
+                            <th>Available No</th>
+                            <th>Audit</th>
+                            <th>Group</th>
+                            <th>Enroll</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat-start="data in courses">
+                            <td rowspan="{{data.instructors.length}}">{{data.date}}</td>
+                            <td rowspan="{{data.instructors.length}}">{{data.location}}</td>
+                            <td>{{data.instructors[0]}}</td>
+                            <td rowspan="{{data.instructors.length}}">{{data.accept - data.enrolled || ""}}</td>
+                            <td>
+                                <md-checkbox ng-model="isAudit" aria-label="Audit?" style="margin-bottom: 0px"></md-checkbox>
+                            </td>
+                            <td rowspan="{{data.instructors.length}}"><span class="md-headline">{{data.id}}</span></td>
+                            <td rowspan="{{data.instructors.length}}">
+                                <md-button class="md-raised" ng-click="enroll(data.id)" ng-disabled="data.accept - data.enrolled == 0">Enroll</md-button>
+                            </td>
+                        </tr>
+                        <tr ng-repeat-end ng-repeat="instructor in data.instructors" ng-hide="$first">
+                            <td>instructor</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </md-content>
+    </div>
+</div>

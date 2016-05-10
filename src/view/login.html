@@ -1,0 +1,32 @@
+<div ng-controller="LoginController" layout="column" ng-cloak>
+    <md-content layout="vertical" flex id="content">
+        <div layout="row" layout-align="center center" layout-fill>
+            <md-whiteframe layout="column" flex="30" layout-padding>
+                <form name="loginForm" ng-submit="login()">
+                    <md-content>
+                        <md-input-container>
+                            <label>Student ID</label>
+                            <input required minlength="11" minlength="11" maxlength="11" name="id" ng-model="user.id">
+                            <div ng-messages="loginForm.id.$error">
+                                <div ng-message="required">This is required.</div>
+                                <div ng-message="minlength">The id has to be 11 characters.</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container>
+                            <label>Password</label>
+                            <input required name="password" ng-model="user.password" type="password">
+                            <div ng-messages="loginForm.password.$error">
+                                <div ng-message="required">This is required.</div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container layout-align="center center">
+                            <div layout="row" layout-sm="column" layout-margin>
+                                <md-button class="md-raised" ng-click="login()">Login</md-button>
+                            </div>
+                        </md-input-container>
+                    </md-content>
+                </form>
+            </md-whiteframe>
+        </div>
+    </md-content>
+</div>
